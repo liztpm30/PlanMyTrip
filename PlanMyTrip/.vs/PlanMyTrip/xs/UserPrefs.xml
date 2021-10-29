@@ -1,14 +1,17 @@
-﻿<Properties StartupConfiguration="{662E3821-AC37-4F38-BF1F-37E4269A5892}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="PlanMyTrip/Program.cs">
+﻿<Properties StartupConfiguration="{C754B183-69A5-4B96-B686-6109AFBF98E5}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="PlanMyTrip/appsettings.json">
     <Files>
-      <File FileName="PlanMyTrip/Program.cs" Line="16" Column="1" />
+      <File FileName="PlanMyTrip/Startup.cs" Line="29" Column="1" />
+      <File FileName="PlanMyTrip/Data/TripContext.cs" Line="15" Column="57" />
+      <File FileName="PlanMyTrip/appsettings.json" Line="14" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="PlanMyTrip" expanded="True">
             <Node name="PlanMyTrip" expanded="True">
-              <Node name="Program.cs" selected="True" />
+              <Node name="Data" expanded="True" />
+              <Node name="appsettings.json" expanded="True" selected="True" />
             </Node>
           </Node>
         </State>
