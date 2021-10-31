@@ -17,4 +17,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Views\Home\Users.cshtml" />
+  </ItemGroup>
 </Project>
