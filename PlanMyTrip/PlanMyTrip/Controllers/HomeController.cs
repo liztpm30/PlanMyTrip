@@ -6,16 +6,19 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PlanMyTrip.Models;
+using PlanMyTrip.Data;
 
 namespace PlanMyTrip.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ITripRepository _repository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ITripRepository repository)
         {
             _logger = logger;
+            this._repository = repository;
         }
 
         public IActionResult Index()
@@ -26,6 +29,13 @@ namespace PlanMyTrip.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        //This is created temporary to show that the db records can be accessed and displayed on the view
+        public IActionResult UserTest()
+        {
+            var dbRecords = _repository.GetAllUsers();
+            return View(dbRecords);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

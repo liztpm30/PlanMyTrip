@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PlanMyTrip.Data;
 
 namespace PlanMyTrip
 {
@@ -23,6 +24,8 @@ namespace PlanMyTrip
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddDbContext<TripContext>();
+            services.AddScoped<ITripRepository, TripRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
