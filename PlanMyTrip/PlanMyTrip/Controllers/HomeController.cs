@@ -31,6 +31,21 @@ namespace PlanMyTrip.Controllers
             return View();
         }
 
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        public IActionResult HomePage()
+        {
+            return View();
+        }
+
         //This is created temporary to show that the db records can be accessed and displayed on the view
         public IActionResult UserTest()
         {
