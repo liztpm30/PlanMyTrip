@@ -1,5 +1,6 @@
-using PlanMyTrip.Models.Maps;
+using PlanMyTrip.Models.Places;
 using PlanMyTrip.Models.Queries;
+using PlanMyTrip.Models.Responses;
 using PlanMyTrip.Services;
 using Refit;
 using System;
@@ -124,6 +125,47 @@ namespace TestPlanMyTrip
             Assert.NotNull(placeResponse);
             var arr = await placeResponse.ReadAsByteArrayAsync();
             Assert.NotEmpty(arr);
+        }
+
+        [Theory]
+        [InlineData("restaurante", 26.36915796164171, -80.1017006043473)]
+        public async Task AutoCompleteSearch(string input, double lat, double lng)
+        {
+
+            var placeQuery = new PlaceAutoCompleteQuery(input);
+            placeQuery.Location = $"{lat},{lng}";
+
+            var response = await _googlePlaceApi.AutoComplete(placeQuery, key);
+            Assert.True(response.IsSuccessStatusCode);
+            var placeResponse = response.Content;
+            Assert.NotNull(placeResponse);
+            Assert.NotNull(placeResponse.Predictions);
+            Assert.NotEmpty(placeResponse.Predictions);
+            Assert.Equal(PlacesSearchStatus.OK, placeResponse.Status);
+            var prediction = placeResponse.Predictions.First();
+            Assert.Equal("Restaurante La Progreseña, West Sample Road, Pompano Beach, FL, USA", prediction.Description);
+            Assert.Equal("ChIJk-oU7zEd2YgRLcYLc6rIkjk", prediction.Reference);
+            Assert.Equal("ChIJk-oU7zEd2YgRLcYLc6rIkjk", prediction.PlaceID);
+            Assert.Equal("Restaurante La Progreseña", prediction.StructuredFormatting.MainText);
+            Assert.True(prediction.Types.SequenceEqual(new List<string>() {"restaurant","food","point_of_interest","establishment"}));
+        }
+
+        [Theory]
+        [InlineData("restaurante near Boca Raton")]
+        public async Task QueryAutoCompleteSearch(string input)
+        {
+            var placeQuery = new AutocompleteQuery(input);
+
+            var response = await _googlePlaceApi.QueryAutoComplete(placeQuery, key);
+            Assert.True(response.IsSuccessStatusCode);
+            var placeResponse = response.Content;
+            Assert.NotNull(placeResponse);
+            Assert.NotNull(placeResponse.Predictions);
+            Assert.NotEmpty(placeResponse.Predictions);
+            Assert.Equal(PlacesSearchStatus.OK, placeResponse.Status);
+            var prediction = placeResponse.Predictions.First();
+            Assert.Equal("restaurants near Boca Raton, FL, USA", prediction.Description);
+            Assert.Equal("restaurants", prediction.StructuredFormatting.MainText);
         }
     }
 }

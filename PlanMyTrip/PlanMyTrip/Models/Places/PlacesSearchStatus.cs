@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
-namespace PlanMyTrip.Models.Maps
+namespace PlanMyTrip.Models.Places
 {
     public enum PlacesSearchStatus
     {
