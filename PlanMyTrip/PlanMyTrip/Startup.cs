@@ -37,6 +37,12 @@ namespace PlanMyTrip
                     client.BaseAddress = new Uri("https://maps.googleapis.com/maps/api/place");
                     client.Timeout = TimeSpan.FromSeconds(15);
                 });
+
+            services.AddRefitClient<IGoogleDistanceMatrixApi>(settings)
+                .ConfigureHttpClient(client => {
+                    client.BaseAddress = new Uri("https://maps.googleapis.com/maps/api/distancematrix");
+                    client.Timeout = TimeSpan.FromSeconds(15);
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

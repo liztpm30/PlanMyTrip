@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using PlanMyTrip.Models.Maps;
+using PlanMyTrip.Models.Places;
 using Refit;
 
 namespace PlanMyTrip.Models.Queries
