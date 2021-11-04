@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PlanMyTrip.Data;
+using PlanMyTrip.Services;
+using Refit;
 
 namespace PlanMyTrip
 {
@@ -26,6 +28,21 @@ namespace PlanMyTrip
             services.AddControllersWithViews();
             services.AddDbContext<TripContext>();
             services.AddScoped<ITripRepository, TripRepository>();
+
+            // Refit 
+            var settings = new RefitSettings();
+
+            services.AddRefitClient<IGooglePlaceApi>(settings)
+                .ConfigureHttpClient(client => {
+                    client.BaseAddress = new Uri("https://maps.googleapis.com/maps/api/place");
+                    client.Timeout = TimeSpan.FromSeconds(15);
+                });
+
+            services.AddRefitClient<IGoogleDistanceMatrixApi>(settings)
+                .ConfigureHttpClient(client => {
+                    client.BaseAddress = new Uri("https://maps.googleapis.com/maps/api/distancematrix");
+                    client.Timeout = TimeSpan.FromSeconds(15);
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
