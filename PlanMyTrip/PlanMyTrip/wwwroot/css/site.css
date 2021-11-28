@@ -7,9 +7,12 @@ a.navbar-brand {
   word-break: break-all;
 }
 
+#navbar-row, navbar-layout {
+    width: 100%;
+}
 /* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
+    color: #0366d6;
 }
 
 .btn-primary {
@@ -51,11 +54,21 @@ button.accept-policy {
   line-height: inherit;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
+#homePage-section1 img{
+    height: 30rem;
+}
+
+#homePage-section2 img {
+    height: 40rem;
+}
+
+.hideElement {
+    display: none;
+}
+
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {

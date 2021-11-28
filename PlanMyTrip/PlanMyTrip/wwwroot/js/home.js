@@ -12,22 +12,41 @@
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
-var title = document.getElementById("title");
+var userName = document.getElementById("userName");
 
 function onLoad() {
 
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
-            title.innerHTML = "User is Logged in..";
-        } else {
-            window.location.href = './Home/HomePage';
+            var userEmail = user.email;
+            userName.innerHTML = userEmail.substr(0, userEmail.indexOf('@'));
+
+            //Hide all elements for non existing users
+            document.querySelectorAll('.userNotLoggedIn').forEach(function (element) {
+                element.classList.add('hideElement');
+            });
+
+            document.querySelectorAll('.userLoggedIn').forEach(function (element) {
+                element.classList.remove('hideElement');
+            });
+                
+        }
+        else {
+            //Hide all elements for existing users
+            document.querySelectorAll('.userLoggedIn').forEach(function (element) {
+                element.classList.add('hideElement');
+            });
+                
+            document.querySelectorAll('.userNotLoggedIn').forEach(function (element) {
+                element.classList.remove('hideElement');
+            });     
         }
     });
 }
 
 function logOut() {
     firebase.auth().signOut().then(() => {
-        window.location.href = './HomePage';
+        window.location.href = '/Home/HomePage';
     }).catch((error) => {
         alert(error);
     });

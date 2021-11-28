@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PlanMyTrip.Models;
 using PlanMyTrip.Data;
+using PlanMyTrip.Data.Entities;
 
 namespace PlanMyTrip.Controllers
 {
@@ -19,11 +20,6 @@ namespace PlanMyTrip.Controllers
         {
             _logger = logger;
             this._repository = repository;
-        }
-
-        public IActionResult Index()
-        {
-            return View();
         }
 
         public IActionResult Privacy()
@@ -46,11 +42,29 @@ namespace PlanMyTrip.Controllers
             return View();
         }
 
+        public IActionResult NewItinerary()
+        {
+            return View();
+        }
+
         //This is created temporary to show that the db records can be accessed and displayed on the view
         public IActionResult UserTest()
         {
             var dbRecords = _repository.GetAllUsers();
+
             return View(dbRecords);
+        }
+
+        [HttpPost]
+        public void CreateUserRecord(string username, string uid)
+        {
+            User newUser = new User
+            {
+                Uid = uid,
+                UserName = username
+            };
+
+            _repository.AddUser(newUser);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

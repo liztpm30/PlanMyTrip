@@ -34,12 +34,14 @@ namespace PlanMyTrip.Data
         }
 
         /// <summary>
-        /// This method saves all changes made to the db records
+        /// This method saves a new user entry to the database
         /// </summary>
-        /// <returns>True if at least one row was changed</returns>
-        public bool saveAllChanges()
+        /// <returns>True if at least one record was added</returns>
+        public bool AddUser (User user)
         {
-            return _context.SaveChanges() > 0;
-        }
+            _context.Set<User>().Add(user);
+            var numberOfRecordsAdded = _context.SaveChanges();
+            return numberOfRecordsAdded > 0;
+        } 
     }
 }
