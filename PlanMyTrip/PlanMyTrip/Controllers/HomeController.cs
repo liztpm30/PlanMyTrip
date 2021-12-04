@@ -26,12 +26,6 @@ namespace PlanMyTrip.Controllers
             this._config = configuration;
 
         }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         public IActionResult Create()
         {
             return View();
@@ -59,11 +53,10 @@ namespace PlanMyTrip.Controllers
 
 
         [HttpPost]
-        public IActionResult GenerateItinerary(int tripDuration, bool sameArea, double lat, double lng, int miles, int maxPlaces, string tripName)
+        public IActionResult GenerateItinerary(int tripDuration, double lat, double lng, int miles, int maxPlaces, string tripName)
         {
 
             ViewBag.tripDuration = tripDuration;
-            ViewBag.sameArea = sameArea;
             ViewBag.lat = lat;
             ViewBag.lng = lng;
             ViewBag.miles = miles;
@@ -72,16 +65,6 @@ namespace PlanMyTrip.Controllers
 
 
             return View("EditItinerary");
-        }
-
-
-
-        //This is created temporary to show that the db records can be accessed and displayed on the view
-        public IActionResult UserTest()
-        {
-            var dbRecords = _repository.GetAllUsers();
-
-            return View(dbRecords);
         }
 
         [HttpPost]
