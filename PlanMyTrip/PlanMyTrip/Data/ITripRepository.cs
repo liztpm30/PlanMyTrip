@@ -7,6 +7,6 @@ namespace PlanMyTrip.Data
     {
         IEnumerable<User> GetAllUsers();
         IEnumerable<User> GetUserByUsername(string userName);
-        public bool saveAllChanges();
+        public bool AddUser(User user);
     }
 }

@@ -1,16 +1,5 @@
-﻿var firebaseConfig = {
-    apiKey: "AIzaSyCv_m5dvh4R0HGuYqKYTDXhDrX4mB2kZtw",
-    authDomain: "planmytrip-80f3d.firebaseapp.com",
-    projectId: "planmytrip-80f3d",
-    storageBucket: "planmytrip-80f3d.appspot.com",
-    messagingSenderId: "493337833060",
-    appId: "1:493337833060:web:a10170db3dc61ada32b971",
-    measurementId: "G-1MVYMEX1R1"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-firebase.analytics();
+﻿
+const httpReq = new XMLHttpRequest();
 
 function createAccount() {
     var email = document.getElementById("email").value;
@@ -20,20 +9,28 @@ function createAccount() {
 
     if (email != "" && password1 != "" && password2 != "" && password1 == password2) {
         firebase.auth().createUserWithEmailAndPassword(email, password1)
-            .then((userCredential) => {
+            .then(function () {
 
-                // save uid and username
-                var currentUser = firebase.auth().currentUser.uid;
-                var username = email.split('@');
+                currentUser = firebase.auth().currentUser;
+                currentUser.sendEmailVerification();
+            })
+            .then(function () {
+
+                var uid = currentUser.uid;
+                var username = currentUser.email.substr(0, email.indexOf('@'));
+
+                //save uid and username
+                httpReq.open('post', '/home/CreateUserRecord', true);
+                httpReq.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                httpReq.send('username=' + username + '&uid=' + uid);
 
                 setTimeout(function () {
                     firebase.auth().onAuthStateChanged(function (user) {
                         if (user) {
-                            window.location.href = '/Home';
+                            window.location.href = '/Home/HomePage';
                         }
                     });
                 }, 850);
-
             })
             .catch((error) => {
                 var errorCode = error.code;

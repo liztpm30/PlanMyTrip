@@ -1,11 +1,43 @@
 ﻿@{ ViewData["Title"] = "Home Page"; }
 
-<body onload="onLoad();">
-    <div class="text-center">
-        <h1 class="display-4" id="title">Filler Home Page</h1>
-        <a href="./Login">Login</a>
-        <br /><br />
-        <a href="./Create">Create Account</a>
+<body>
+    <div class="container" id="homePage-section1">
+        <div class="row">
+            <div class="col-6">
+                <img src="/img/img1.jpg" class="rounded mx-auto d-block">
+            </div>
+            <div class="col-6 d-flex justify-content-center align-items-center">
+                <div class="container">
+                    <h1>Your next adventure starts here!</h1>
+                    <p>Are you excited for your next trip but don't want to spend hours planning your itinerary? Let us take care of that for you! Just answer a few questions about your next trip and we will give you the best possible plan! The best part... it's free!</p>
+                    <a role="button" class="btn btn-light active" asp-controller="Home" asp-action="NewItinerary">Start a new itinerary</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="homePage-section2">
+        <div class="row">
+            <div class="col-6 d-flex justify-content-center align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <h3>Make your travel plans a reality</h3>
+                        <p>We will generate the best possible plan for you so you can focus only on the fun part!</p>
+                    </div>
+                    <div class="row">
+                        <h3>Customize your trip</h3>
+                        <p>You can edit your trip, add activities or remove plans. All in one place!</p>
+                    </div>
+                    <div class="row">
+                        <h3>See your previous itineraries</h3>
+                        <p>Create an account to keep record of your previous itineraries or edit your current trip.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <img src="/img/img2.jpg" class="rounded mx-auto d-block">
+            </div>
+        </div>
     </div>
 
 </body>

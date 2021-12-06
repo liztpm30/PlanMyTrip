@@ -1,0 +1,113 @@
+﻿@{ ViewData["Title"] = "Home Page"; }
+
+<body onload="onLoad();">
+
+    @using (@Html.BeginForm("GenerateItinerary", "Home"))
+    {
+        <div class="container d-flex justify-content-center" id="newItinerary-section1">
+            <div class="row">
+                <div class="container p-4">
+                    <div class="card m-4">
+                        <div class="card-body">
+                            <div class="container justify-content-center m-4">
+                                <h5 class="card-title d-flex justify-content-center" id="new-it-sec1">Are you ready for your next adventure?!</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-7 mt-4 d-flex justify-content-center">
+                                    <p class="card-text">What will be the duration of the trip?</p>
+                                </div>
+                                <div class="col-3 mt-4">
+                                    <div class="input-group input-group-lg">
+                                        <input type="text" id="tripDuration" name="tripDuration" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" required>
+                                    </div>
+                                </div>
+                                <div class="col-2 mt-4">
+                                    <p class="card-text">Days</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container d-flex justify-content-center my-4 py-4" id="newItinerary-section2">
+            <div class="row m-4 p-4">
+                <div class="col-4">
+                    <div class="row my-4">
+                        <h3>Where are you going?</h3>
+                    </div>
+                    <div class="row ">
+                        <p>Select a location on the map and enter the number of miles you would like to drive away from that point.</p>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="input-group input-group-lg">
+                                <input id="miles" name="miles" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" required>
+                            </div>
+                        </div>
+                        <div class="col-7 d-flex align-items-end">
+                            <p class="d-flex m-0">Miles</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-8" id="map"></div>
+            </div>
+        </div>
+
+        <div class="container d-flex justify-content-center my-4 py-4" id="newItinerary-section3">
+            <div class="row d-flex justify-content-center">
+                <div class="col-6">
+                    <div class="container" id="num-days">
+                        <h2>What's the maximum number of places you can visit in one day?</h2>
+                        <p>The number of places per day generated for the itinerary depend on the distance and duration of the visit.</p>
+                        <div class="container">
+                            <div class="input-group input-group-lg">
+                                <input type="text" name="maxPlaces" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container d-flex justify-content-center mt-4 pt-4" id="newItinerary-section4">
+            <div class="row">
+                <div class="container p-4">
+                    <div class="card m-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-7 mt-4 d-flex justify-content-center">
+                                    <p class="card-text">What will be the name of this trip?</p>
+                                </div>
+                                <div class="col-5 mt-4">
+                                    <div class="input-group input-group-lg">
+                                        <input type="text" name="tripName" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*These elements are created to be passed to the controller. They will remain hidden*@
+        <div id="hiddenFormData">
+            <input name="lat" id="lat" />
+            <input name="lng" id="lng" />
+        </div>
+
+        <div class="container d-flex justify-content-center mb-4 pb-4" id="newItinerary-section5">
+            <button type="submit" class="btn btn-secondary btn-lg mb-4">Generate Itinerary!</button>
+        </div>
+
+    }
+
+
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script src="~/js/map.js" asp-append-version="true"></script>
+    <script src=@ViewBag.apiUrl
+            async></script>
+
+</body>
