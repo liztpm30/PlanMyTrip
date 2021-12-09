@@ -60,7 +60,7 @@ namespace PlanMyTrip.Controllers
 
         private HashSet<string> VacationBox = new HashSet<string> { "museum", "theme park", "restaurant", "park", "beach" };
         [HttpPost]
-        public async Task<IActionResult> GenerateItinerary(int tripDuration, double lat, double lng, int miles, int maxPlaces, string tripName)
+        public async Task<IActionResult> GenerateItinerary(string formUserName, int tripDuration, double lat, double lng, int miles, int maxPlaces, string tripName)
         {
             //pass API key
             var apiKey = _config.GetValue<string>("GoogleApiKey");
@@ -130,17 +130,21 @@ namespace PlanMyTrip.Controllers
                 }
             }
             itinerary.Places = itineraries;
-            int id = _repository.AddItinerary(1, itinerary);
-            return await EditItinerary(id, 1);
+
+            //get userId
+            var user = _repository.GetUserByUsername(formUserName).FirstOrDefault();
+
+            int id = _repository.AddItinerary(user.Id, itinerary);
+            return await EditItinerary(id, 1, user.Id);
         }
 
-        public async Task<IActionResult> EditItinerary(int itineraryid, int day)
+        public async Task<IActionResult> EditItinerary(int itineraryid, int day, int userId)
         {
             var apiKey = _config.GetValue<string>("GoogleApiKey");
             var apiUrl = $"https://maps.googleapis.com/maps/api/js?key={apiKey}&callback=initAutocomplete&v=weekly&libraries=places";
             ViewBag.apiUrl = apiUrl;
 
-            var db = _repository.GetUserItinerarybyID(1, itineraryid).Itinerary.Places; 
+            var db = _repository.GetUserItinerarybyID(userId, itineraryid).Itinerary.Places; 
             var forTheDay = db.Where(x => x.DayNumber == day);
             if (forTheDay != null && forTheDay.Count() > 0)
             {
@@ -157,6 +161,7 @@ namespace PlanMyTrip.Controllers
             }
             ViewBag.day = day;
             ViewBag.itineraryid = itineraryid;
+            ViewBag.userId = userId;
             if (day <= 1) {
                 ViewBag.prev = false;
             }

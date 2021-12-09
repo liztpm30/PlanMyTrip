@@ -17,8 +17,8 @@ function initMap() {
     savePosition();
 
     //Add event listeners
-    marker.addListener("click", toggleBounce);
     marker.addListener("dragend", savePosition);
+
 }
 
 function toggleBounce() {

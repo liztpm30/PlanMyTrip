@@ -47,13 +47,16 @@ namespace PlanMyTrip.Data
 
         public int AddItinerary(int userId, Itinerary itinerary)
         {
-            var user = _context.Users
+            var currentUser = _context.Users
                 .Where(c => c.Id == userId)
                 .Include(u => u.UserItinerary)
+                .ThenInclude(u => u.Itinerary)
                 .FirstOrDefault();
 
-            user.UserItinerary.Add(new UserItinerary { Itinerary = itinerary });
-            return user.UserItinerary
+            currentUser.UserItinerary.Add(new UserItinerary { Itinerary = itinerary , user = currentUser });
+            _context.SaveChanges();
+
+            return currentUser.UserItinerary
                 .Where(x => x.Itinerary.LastUpdatedDate == itinerary.LastUpdatedDate)
                 .FirstOrDefault().Id;
         }

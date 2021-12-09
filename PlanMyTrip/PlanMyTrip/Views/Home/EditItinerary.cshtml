@@ -50,7 +50,7 @@
                 <div class="col">
                     @if (ViewBag.prev)
                     {
-                        <a href="@Url.Action("EditItinerary", "Home", new {itineraryid = ViewBag.itineraryid, day = ViewBag.day - 1})">
+                        <a href="@Url.Action("EditItinerary", "Home", new {itineraryid = ViewBag.itineraryid, day = ViewBag.day - 1, userId = ViewBag.userId})">
                             <i class="fas fa-arrow-left fa-3x"></i>
                         </a>
                     }
@@ -58,7 +58,7 @@
                 <div class="col justify-content-end">
                     @if (ViewBag.next)
                     {
-                        <a href="@Url.Action("EditItinerary", "Home", new {itineraryid = ViewBag.itineraryid, day = ViewBag.day + 1})">
+                        <a href="@Url.Action("EditItinerary", "Home", new {itineraryid = ViewBag.itineraryid, day = ViewBag.day + 1, userId = ViewBag.userId})">
                             <i class="fas fa-arrow-right fa-3x" style="text-align: end"></i>
                         </a>
                     }
