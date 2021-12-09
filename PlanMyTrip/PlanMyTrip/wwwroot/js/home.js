@@ -44,6 +44,13 @@ function onLoad() {
     });
 }
 
+function showHistory() {
+
+    var username = document.getElementById("userName").innerHTML;
+    var url = "/home/History?username=" + username;
+    window.location.href = url;
+}
+
 function logOut() {
     firebase.auth().signOut().then(() => {
         window.location.href = '/Home/HomePage';
