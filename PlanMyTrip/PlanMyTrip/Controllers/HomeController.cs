@@ -75,7 +75,7 @@ namespace PlanMyTrip.Controllers
 
         private HashSet<string> VacationBox = new HashSet<string> { "museum", "theme park", "restaurant", "park", "beach" };
         [HttpPost]
-        public async Task<IActionResult> GenerateItinerary(int tripDuration, double lat, double lng, int miles, int maxPlaces, string tripName, string username)
+        public async Task<IActionResult> GenerateItinerary(int tripDuration, double lat, double lng, int miles, int maxPlaces, string tripName)
         {
             //pass API key
             var apiKey = _config.GetValue<string>("GoogleApiKey");
@@ -145,10 +145,7 @@ namespace PlanMyTrip.Controllers
                 }
             }
             itinerary.Places = itineraries;
-
-
-            var user = _repository.GetUserByUsername(username);
-            int id = _repository.AddItinerary(user.First().Id, itinerary);
+            int id = _repository.AddItinerary(1, itinerary);
             return await EditItinerary(id, 1);
         }
 
