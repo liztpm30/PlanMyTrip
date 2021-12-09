@@ -47,6 +47,21 @@ namespace PlanMyTrip.Controllers
             return View();
         }
 
+        public IActionResult History(string username)
+        {
+            var user = _repository.GetUserByUsername(username);
+            var useritineraries = _repository.GetUserItineraries(user.First().Id);
+
+            List<Itinerary> list = new List<Itinerary>();
+            foreach (UserItinerary userItinerary in useritineraries)
+            {
+                var itinerary = _repository.GetUserItinerarybyID(user.First().Id, userItinerary.Id);
+                list.Add(itinerary.Itinerary);
+            }
+
+            return View(list);
+        }
+
         public IActionResult NewItinerary()
         {
             //pass API key
@@ -204,6 +219,8 @@ namespace PlanMyTrip.Controllers
 
             return null;
         }
+
+
 
         [HttpGet]
         public async Task<FileResult> GetPlacePhoto(string? place)

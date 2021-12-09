@@ -28,7 +28,7 @@
                                         <li><a class="dropdown-item userLoggedIn">Hi <span id="userName">user</span>!</a></li>
                                         <li><a class="dropdown-item userNotLoggedIn" asp-controller="Home" asp-action="Login">Login</a></li>
                                         <li><a class="dropdown-item userNotLoggedIn" asp-controller="Home" asp-action="Create">Create Account</a></li>
-                                        <li><a class="dropdown-item userLoggedIn" asp-controller="Home" asp-action="HomePage">See Itineraries</a></li>
+                                        <li><a class="dropdown-item userLoggedIn" onclick="showHistory();">See Itineraries</a></li>
                                         <li><a class="dropdown-item userLoggedIn" onclick="logOut();">Logout</a></li>
                                     </ul>
                                 </li>
