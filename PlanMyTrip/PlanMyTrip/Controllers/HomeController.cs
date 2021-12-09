@@ -130,12 +130,18 @@ namespace PlanMyTrip.Controllers
                 }
             }
             itinerary.Places = itineraries;
-            return await EditItinerary(itinerary, 1);
+            int id = _repository.AddItinerary(1, itinerary);
+            return await EditItinerary(id, 1);
         }
 
-        public async Task<IActionResult> EditItinerary(Itinerary itinerary, int day)
+        public async Task<IActionResult> EditItinerary(int itineraryid, int day)
         {
-            var forTheDay = itinerary.Places.TakeWhile(x => x.DayNumber == day);
+            var apiKey = _config.GetValue<string>("GoogleApiKey");
+            var apiUrl = $"https://maps.googleapis.com/maps/api/js?key={apiKey}&callback=initAutocomplete&v=weekly&libraries=places";
+            ViewBag.apiUrl = apiUrl;
+
+            var db = _repository.GetUserItinerarybyID(1, itineraryid).Itinerary.Places; 
+            var forTheDay = db.Where(x => x.DayNumber == day);
             if (forTheDay != null && forTheDay.Count() > 0)
             {
                 var placeDetails = new List<PlaceDetailResponse>();
@@ -150,7 +156,21 @@ namespace PlanMyTrip.Controllers
                 ViewBag.places = placeDetails;
             }
             ViewBag.day = day;
-            ViewBag.itinerary = itinerary;
+            ViewBag.itineraryid = itineraryid;
+            if (day <= 1) {
+                ViewBag.prev = false;
+            }
+            else {
+                ViewBag.prev = true;
+            }
+
+            if (day < db.Max(x => x.DayNumber))
+            {
+                ViewBag.next = true;
+            }
+            else {
+                ViewBag.next = false;
+            }
             return View("EditItinerary");
         }
 
@@ -181,8 +201,10 @@ namespace PlanMyTrip.Controllers
         }
 
         [HttpGet]
-        public async Task<FileResult> GetPlacePhoto(string place)
+        public async Task<FileResult> GetPlacePhoto(string? place)
         {
+            if (place == null)
+                return null;
             var apiKey = _config.GetValue<string>("GoogleApiKey");
             var photoQuery = new PlacePhotoQuery(place, 200, 200);
             var task = await _googlePlaceApi.PlacePhoto(photoQuery, apiKey);
