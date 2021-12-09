@@ -39,6 +39,9 @@
                                     <li class="list-group-item">Rating: @rating</li>
                                 </ul>
                             </div>
+                              <div class="card-footer bg-light">
+                                <a href="@Url.Action("RemoveItineraryItem", "Home", new {itineraryid = ViewBag.itineraryid, day = ViewBag.day, userId = ViewBag.userId, googleid = place.Result.PlaceID})" class="card-link">Remove Item</a>
+                              </div>
                             <div class="card-footer">
                                 <small class="text-muted">Last updated 3 mins ago</small>
                             </div>
