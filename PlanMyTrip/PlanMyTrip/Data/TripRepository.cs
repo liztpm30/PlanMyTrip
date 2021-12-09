@@ -90,5 +90,51 @@ namespace PlanMyTrip.Data
 
             return null;
         }
+
+        public bool RemoveItineraryEntrybyGoogleID(int userId, int iteneraryid, string GoogleID)
+        {
+            var user = _context.Users
+               .Where(c => c.Id == userId)
+               .Include(u => u.UserItinerary)
+               .ThenInclude(u => u.Itinerary)
+               .ThenInclude(u => u.Places)
+               .ThenInclude(u => u.Place)
+               .FirstOrDefault();
+
+
+            if (user.UserItinerary != null)
+            {
+                var userItinerary = user.UserItinerary.FirstOrDefault(x => x.Id == iteneraryid);
+                var remove = userItinerary.Itinerary.Places.First(x => x.Place.GooglePlaceID == GoogleID);
+                userItinerary.Itinerary.Places.Remove(remove);
+                int result = _context.SaveChanges();
+                return result > 0;
+            }
+
+            return false;
+        }
+
+        public bool ReplaceItineraryEntrywithGoogleID(int userId, int iteneraryid, string googleID, Place replace)
+        {
+            var user = _context.Users
+               .Where(c => c.Id == userId)
+               .Include(u => u.UserItinerary)
+               .ThenInclude(u => u.Itinerary)
+               .ThenInclude(u => u.Places)
+               .ThenInclude(u => u.Place)
+               .FirstOrDefault();
+
+
+            if (user.UserItinerary != null)
+            {
+                var userItinerary = user.UserItinerary.FirstOrDefault(x => x.Id == iteneraryid);
+                var place = userItinerary.Itinerary.Places.First(x => x.Place.GooglePlaceID == googleID);
+                place.Place = replace;
+                int result = _context.SaveChanges();
+                return result > 0;
+            }
+
+            return false;
+        }
     }
 }

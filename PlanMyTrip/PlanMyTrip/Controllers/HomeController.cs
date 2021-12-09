@@ -179,6 +179,18 @@ namespace PlanMyTrip.Controllers
             return View("EditItinerary");
         }
 
+        public async Task<IActionResult> RemoveItineraryItem(int itineraryid, int day, int userId, string googleid)
+        {
+            _repository.RemoveItineraryEntrybyGoogleID(userId, itineraryid, googleid);
+            return await EditItinerary(itineraryid, day, userId);
+        }
+
+        public async Task<IActionResult> ReplaceItineraryItem(int itineraryid, int day, int userId, string description)
+        {
+            /*_repository.ReplaceItineraryEntrywithGoogleID(userId, itineraryid, googleid);*/
+            return await EditItinerary(itineraryid, day, userId);
+        }
+
         private async Task<PlaceDetailResponse> GetPlaceDetails(string googleid)
         {
             var apiKey = _config.GetValue<string>("GoogleApiKey");
