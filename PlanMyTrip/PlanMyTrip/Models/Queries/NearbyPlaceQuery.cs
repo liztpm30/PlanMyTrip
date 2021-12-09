@@ -9,9 +9,8 @@ namespace PlanMyTrip.Models.Queries
 {
     public class NearbyPlaceQuery
     {
-        public NearbyPlaceQuery(string keyword, string location)
+        public NearbyPlaceQuery(string location)
         {
-            Keyword = keyword;
             Location = location;
         }
 
