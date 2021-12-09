@@ -14,12 +14,17 @@ firebase.analytics();
 
 var userName = document.getElementById("userName");
 
+//Save the userName to the form value to be passed to the controller
+var userName = document.getElementById("userName");
+var formUserName = document.getElementById("formUserName");
+
 function onLoad() {
 
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             var userEmail = user.email;
             userName.innerHTML = userEmail.substr(0, userEmail.indexOf('@'));
+            formUserName.value = userEmail.substr(0, userEmail.indexOf('@'));
 
             //Hide all elements for non existing users
             document.querySelectorAll('.userNotLoggedIn').forEach(function (element) {
