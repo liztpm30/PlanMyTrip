@@ -77,11 +77,6 @@ button.accept-policy {
     font-size: 2rem;
 }
 
-.card {
-    background-color: #d6fffd;
-    border: none;
-}
-
 html {
     position: relative;
     min-height: 100%;

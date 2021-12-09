@@ -42,6 +42,6 @@ namespace PlanMyTrip.Data
             _context.Set<User>().Add(user);
             var numberOfRecordsAdded = _context.SaveChanges();
             return numberOfRecordsAdded > 0;
-        } 
+        }
     }
 }

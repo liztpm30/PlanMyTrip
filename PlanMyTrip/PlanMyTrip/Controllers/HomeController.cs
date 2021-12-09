@@ -9,6 +9,10 @@ using PlanMyTrip.Models;
 using PlanMyTrip.Data;
 using PlanMyTrip.Data.Entities;
 using Microsoft.Extensions.Configuration;
+using PlanMyTrip.Services;
+using PlanMyTrip.Models.Queries;
+using PlanMyTrip.Models.Places;
+using PlanMyTrip.Models.Responses;
 
 namespace PlanMyTrip.Controllers
 {
@@ -18,13 +22,15 @@ namespace PlanMyTrip.Controllers
         private readonly ITripRepository _repository;
         private readonly IConfiguration _config;
 
+        private readonly IGooglePlaceApi _googlePlaceApi;
 
-        public HomeController(ILogger<HomeController> logger, ITripRepository repository, IConfiguration configuration)
+
+        public HomeController(ILogger<HomeController> logger, ITripRepository repository, IConfiguration configuration, IGooglePlaceApi api)
         {
             _logger = logger;
             this._repository = repository;
             this._config = configuration;
-
+            this._googlePlaceApi = api;
         }
         public IActionResult Create()
         {
@@ -52,10 +58,16 @@ namespace PlanMyTrip.Controllers
         }
 
 
+        private HashSet<string> VacationBox = new HashSet<string> { "museum", "theme park", "restaurant", "park", "beach" };
         [HttpPost]
-        public IActionResult GenerateItinerary(int tripDuration, double lat, double lng, int miles, int maxPlaces, string tripName)
+        public async Task<IActionResult> GenerateItinerary(int tripDuration, double lat, double lng, int miles, int maxPlaces, string tripName)
         {
+            //pass API key
+            var apiKey = _config.GetValue<string>("GoogleApiKey");
+            var apiUrl = $"https://maps.googleapis.com/maps/api/js?key={apiKey}&callback=initAutocomplete&v=weekly&libraries=places";
+            ViewBag.apiUrl = apiUrl;
 
+            
             ViewBag.tripDuration = tripDuration;
             ViewBag.lat = lat;
             ViewBag.lng = lng;
@@ -64,7 +76,122 @@ namespace PlanMyTrip.Controllers
             ViewBag.tripName = tripName;
 
 
+            Itinerary itinerary = new Itinerary();
+            itinerary.TripName = ViewBag.tripName;
+            itinerary.LastUpdatedDate = DateTime.Now.Ticks;
+            itinerary.NumberOfDays = ViewBag.tripDuration;
+            
+            LinkedList<PlaceItinerary> itineraries = new LinkedList<PlaceItinerary>();
+            NearbyPlaceQuery nearbyPlaceQuery = new NearbyPlaceQuery(new Coordinates{Latitude = ViewBag.lat, Longitude = ViewBag.lng}.ToString());
+            var responses = await GetNearbyPlaces(nearbyPlaceQuery);
+            
+            int days = 0;
+            int locations = 0;
+            int index = 0;
+            int box = 0;
+            HashSet<string> ids = new HashSet<string>();
+            while (days < ViewBag.tripDuration && locations < ViewBag.maxPlaces)
+            {
+                if (index >= responses.Results.Count)
+                {
+                    if (box < VacationBox.Count)
+                    {
+                        nearbyPlaceQuery.Keyword = VacationBox.ElementAt(box++);
+                        responses = await GetNearbyPlaces(nearbyPlaceQuery);
+                        index = 0;
+                    }
+                    else 
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    var place = responses.Results[index++];
+                    if (!ids.Contains(place.PlaceID))
+                    {
+                        itineraries.AddLast(new PlaceItinerary {
+                            Place      = new Data.Entities.Place { GooglePlaceID = place.PlaceID, PlaceName = place.Name, Details = place.FormattedAddress },
+                            PlaceIndex = locations+1,
+                            DayNumber  = days+1
+                        });
+                        locations++;
+                        ids.Add(place.PlaceID);
+                        if (locations >= ViewBag.maxPlaces)
+                        {
+                            days++;
+                            locations = 0;
+                        }
+                    }
+                    else 
+                    {
+                        index++;
+                    }
+                }
+            }
+            itinerary.Places = itineraries;
+            return await EditItinerary(itinerary, 1);
+        }
+
+        public async Task<IActionResult> EditItinerary(Itinerary itinerary, int day)
+        {
+            var forTheDay = itinerary.Places.TakeWhile(x => x.DayNumber == day);
+            if (forTheDay != null && forTheDay.Count() > 0)
+            {
+                var placeDetails = new List<PlaceDetailResponse>();
+                foreach (var activity in forTheDay)
+                {
+                    var detail = await GetPlaceDetails(activity.Place.GooglePlaceID); 
+                    if (detail != null)
+                    {
+                        placeDetails.Add(detail);
+                    }
+                }
+                ViewBag.places = placeDetails;
+            }
+            ViewBag.day = day;
+            ViewBag.itinerary = itinerary;
             return View("EditItinerary");
+        }
+
+        private async Task<PlaceDetailResponse> GetPlaceDetails(string googleid)
+        {
+            var apiKey = _config.GetValue<string>("GoogleApiKey");
+            var placeDetailsQuery = new PlaceDetailsQuery(googleid);
+            var response = await _googlePlaceApi.PlaceDetails(placeDetailsQuery, apiKey);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = response.Content;
+                return content;
+            }
+            return null;
+        }
+
+        private async Task<PlaceNearbyResponse> GetNearbyPlaces(NearbyPlaceQuery nearbyPlaceQuery)
+        {
+            var apiKey = _config.GetValue<string>("GoogleApiKey");
+            var response = await _googlePlaceApi.NearbySearch(nearbyPlaceQuery, apiKey);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = response.Content;
+                return content;
+            }
+
+            return null;
+        }
+
+        [HttpGet]
+        public async Task<FileResult> GetPlacePhoto(string place)
+        {
+            var apiKey = _config.GetValue<string>("GoogleApiKey");
+            var photoQuery = new PlacePhotoQuery(place, 200, 200);
+            var task = await _googlePlaceApi.PlacePhoto(photoQuery, apiKey);
+            if (task.IsSuccessStatusCode)
+            {
+                var response = await task.Content.ReadAsByteArrayAsync();
+                return File(response, "image/png");
+            }
+            return null;
         }
 
         [HttpPost]

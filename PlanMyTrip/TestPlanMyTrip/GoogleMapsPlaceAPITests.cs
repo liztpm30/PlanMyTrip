@@ -64,7 +64,7 @@ namespace TestPlanMyTrip
             Assert.Equal(26.3688215, place.Geometry.Location.Latitude);
             Assert.Equal(-80.10177170000001, place.Geometry.Location.Longitude);
             Assert.Equal("https://www.fau.edu/artsandletters/galleries/", place.Website);
-            Assert.Equal(new List<string> { "Monday: Closed", "Tuesday: 1:00 – 4:00 PM", "Wednesday: 1:00 – 4:00 PM", "Thursday: 1:00 – 4:00 PM", "Friday: 1:00 – 4:00 PM", "Saturday: 1:00 – 5:00 PM", "Sunday: Closed" }, place.OpeningHours.WeekdayText);
+            Assert.Equal(new List<string> { "Monday: Closed", "Tuesday: 1:00 ï¿½ 4:00 PM", "Wednesday: 1:00 ï¿½ 4:00 PM", "Thursday: 1:00 ï¿½ 4:00 PM", "Friday: 1:00 ï¿½ 4:00 PM", "Saturday: 1:00 ï¿½ 5:00 PM", "Sunday: Closed" }, place.OpeningHours.WeekdayText);
             Assert.Equal("76RX9V9X+G7", place.PlusCode.GlobalCode);
         }
 
@@ -73,8 +73,8 @@ namespace TestPlanMyTrip
         public async Task NearbySearch(string keyword, double lat, double lng)
         {
 
-            var placeQuery = new NearbyPlaceQuery(keyword, $"{lat},{lng}");
-
+            var placeQuery = new NearbyPlaceQuery( $"{lat},{lng}");
+            placeQuery.Keyword = keyword;
             var response = await _googlePlaceApi.NearbySearch(placeQuery, key);
             Assert.True(response.IsSuccessStatusCode);
             var placeResponse = response.Content;
@@ -143,10 +143,10 @@ namespace TestPlanMyTrip
             Assert.NotEmpty(placeResponse.Predictions);
             Assert.Equal(PlacesSearchStatus.OK, placeResponse.Status);
             var prediction = placeResponse.Predictions.First();
-            Assert.Equal("Restaurante La Progreseña, West Sample Road, Pompano Beach, FL, USA", prediction.Description);
+            Assert.Equal("Restaurante La Progreseï¿½a, West Sample Road, Pompano Beach, FL, USA", prediction.Description);
             Assert.Equal("ChIJk-oU7zEd2YgRLcYLc6rIkjk", prediction.Reference);
             Assert.Equal("ChIJk-oU7zEd2YgRLcYLc6rIkjk", prediction.PlaceID);
-            Assert.Equal("Restaurante La Progreseña", prediction.StructuredFormatting.MainText);
+            Assert.Equal("Restaurante La Progreseï¿½a", prediction.StructuredFormatting.MainText);
             Assert.True(prediction.Types.SequenceEqual(new List<string>() {"restaurant","food","point_of_interest","establishment"}));
         }
 
