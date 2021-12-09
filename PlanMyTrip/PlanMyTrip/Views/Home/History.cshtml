@@ -16,7 +16,11 @@
                                         <a class="card-link" href="#">
                                             <h5 class="card-title">@Html.DisplayFor(modelItem => item2.TripName)</h5>
                                         </a>
-                                        <div class="text-muted h9 mb-2"> <i class="fa fa-clock-o"></i> Last Updated @Html.DisplayFor(modelItem => item2.LastUpdatedDate) days ago</div>
+                                        @{
+                                            DateTime myDate = new DateTime(item2.LastUpdatedDate);
+                                            String date = myDate.ToString("MMMM dd, yyyy");
+                                        }
+                                        <div class="text-muted h9 mb-2"> <i class="fa fa-clock-o"></i> Last Updated @date</div>
                                 </div>
                             </div>
                         </div>
