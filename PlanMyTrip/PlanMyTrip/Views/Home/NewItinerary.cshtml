@@ -99,13 +99,15 @@
         </div>
 
         <div class="container d-flex justify-content-center mb-4 pb-4" id="newItinerary-section5">
-            <button type="submit" class="btn btn-secondary btn-lg mb-4">Generate Itinerary!</button>
+            <button id="submitButton" type="submit" class="btn btn-secondary btn-lg mb-4">Generate Itinerary!</button>
         </div>
 
     }
 
 
     <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/js/newItinerary.js"></script>
     <script src="~/js/map.js" asp-append-version="true"></script>
     <script src=@ViewBag.apiUrl
             async></script>

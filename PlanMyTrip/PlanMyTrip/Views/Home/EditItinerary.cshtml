@@ -31,7 +31,7 @@
                     var rating = place.Result.Rating == 0 ? "N/A" : place.Result.Rating.ToString();
                     <div class="col">
                         <div class="card h-100">
-                            <img src="@Url.Action("GetPlacePhoto", "Home", new { place = place.Result.Photos.First().PhotoReference })" class="card-img-top" alt="...">
+                            <img src="@Url.Action("GetPlacePhoto", "Home", new { place = place.Result.Photos?.First()?.PhotoReference })" class="card-img-top" alt="...">
                             <div class="card-body">
                                 <h5 class="card-title">@place.Result.Name</h5>
                                 <p class="card-text">@place.Result.FormattedAddress</p>
@@ -48,17 +48,17 @@
             </div>
             <div class="row">
                 <div class="col">
-                    @if (ViewBag.day > 1)
+                    @if (ViewBag.prev)
                     {
-                        <a href="@Url.Action("EditItinerary", "Home", new {itinerary = ViewBag.itinerary, day = ViewBag.day - 1})">
+                        <a href="@Url.Action("EditItinerary", "Home", new {itineraryid = ViewBag.itineraryid, day = ViewBag.day - 1})">
                             <i class="fas fa-arrow-left fa-3x"></i>
                         </a>
                     }
                 </div>
                 <div class="col justify-content-end">
-                    @if (ViewBag.day < ViewBag.itinerary.NumberOfDays)
+                    @if (ViewBag.next)
                     {
-                        <a href="@Url.Action("EditItinerary", "Home", new {itinerary = ViewBag.itinerary, day = ViewBag.day + 1})">
+                        <a href="@Url.Action("EditItinerary", "Home", new {itineraryid = ViewBag.itineraryid, day = ViewBag.day + 1})">
                             <i class="fas fa-arrow-right fa-3x" style="text-align: end"></i>
                         </a>
                     }
