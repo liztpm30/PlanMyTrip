@@ -1,5 +1,8 @@
-**/bin/**
-**/obj/**
-**/.vs/**
-**/.vscode/**
-**/wwwroot/lib/**
+/bin/
+/obj/
+/.vs/
+/.vscode/
+/wwwroot/lib/
+DS_Store
+/Migrations/
+/appsettings.json/**

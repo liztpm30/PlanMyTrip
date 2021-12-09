@@ -17,3 +17,10 @@ $(document).ready(function () {
         }
     });
 });
+
+function updateName() {
+    var usernamePass = document.getElementById("usernamePass");
+    var userName = document.getElementById("userName").innerHTML;
+    usernamePass.value = userName;
+    alert(usernamePass.innerHTML);
+}
