@@ -3,6 +3,3 @@
 **/.vs/**
 **/.vscode/**
 **/wwwroot/lib/**
-**DS_Store
-**/Migrations/**
-**/appsettings.json/**
