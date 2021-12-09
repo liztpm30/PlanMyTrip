@@ -10,7 +10,7 @@ namespace PlanMyTrip.Data
         private readonly IConfiguration _config;
 
         public DbSet<User> Users { get; set; }
-
+        public DbSet<Itinerary> Itinerary { get; set; }
 
         public TripContext(IConfiguration configuration)
         {

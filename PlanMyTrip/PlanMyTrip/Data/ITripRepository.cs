@@ -8,5 +8,7 @@ namespace PlanMyTrip.Data
         IEnumerable<User> GetAllUsers();
         IEnumerable<User> GetUserByUsername(string userName);
         public bool AddUser(User user);
+        public ICollection<UserItinerary> GetUserItineraries(int userId);
+        public List<List<Itinerary>> GetItineraries(ICollection<UserItinerary> UserIt);
     }
 }

@@ -41,6 +41,14 @@ namespace PlanMyTrip.Controllers
             return View();
         }
 
+        public IActionResult History ()
+        {
+            var record = _repository.GetUserItineraries(4);
+            var record2 = _repository.GetItineraries(record);
+
+            return View(record2);
+        }
+
         public IActionResult NewItinerary()
         {
             //pass API key

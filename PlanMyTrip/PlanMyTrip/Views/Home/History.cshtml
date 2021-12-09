@@ -1,0 +1,48 @@
+﻿@model List<List<Itinerary>>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1 style="text-align: center; padding: 45px;">View Current and Past Itineraries</h1>
+
+    @foreach (var item1 in Model) 
+    {
+        @foreach (var item2 in item1) 
+        {
+            <div style="padding: 15px">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="ml-2">
+                                    <div class="h5 m-0"></div>
+                                        <a class="card-link" href="#">
+                                            <h5 class="card-title">@Html.DisplayFor(modelItem => item2.TripName)</h5>
+                                        </a>
+                                        <div class="text-muted h9 mb-2"> <i class="fa fa-clock-o"></i> Last Updated @Html.DisplayFor(modelItem => item2.LastUpdatedDate) days ago</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            Total days visting: @Html.DisplayFor(modelItem => item2.NumberOfDays) 
+                        </p>
+                    </div>
+                </div> 
+            </div>
+        }
+    }
+
+
+</body>
+</html>

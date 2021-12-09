@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using PlanMyTrip.Data.Entities;
 
 namespace PlanMyTrip.Data
@@ -42,6 +43,31 @@ namespace PlanMyTrip.Data
             _context.Set<User>().Add(user);
             var numberOfRecordsAdded = _context.SaveChanges();
             return numberOfRecordsAdded > 0;
-        } 
+        }
+
+        public ICollection<UserItinerary> GetUserItineraries(int userId)
+        {
+            var user = _context.Users
+                .Where(c => c.Id == userId)
+                .Include(u => u.Itineraries)
+                .ToList();
+
+            return user.First().Itineraries;
+        }
+        public List<List<Itinerary>> GetItineraries(ICollection<UserItinerary> UserIt)
+        {
+            List<List<Itinerary>> list = new List<List<Itinerary>>();
+            foreach (UserItinerary UserItinerary in UserIt)
+            {
+                var record = _context.Itinerary
+                    .Where(c => c.Id == UserItinerary.ItineraryId)
+                    .ToList();
+
+                list.Add(record);
+            }
+
+            return list;
+        }
+
     }
 }
